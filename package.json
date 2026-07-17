@@ -1,0 +1,22 @@
+{
+  "name": "icecream-factura-pro",
+  "version": "1.0.0",
+  "description": "Sistema de facturación para heladerías con impresora térmica Zebra ZQ320 Plus",
+  "main": "print-server.js",
+  "scripts": {
+    "start": "node print-server.js",
+    "server": "node print-server.js"
+  },
+  "keywords": ["facturación", "helado", "impresora térmica", "Zebra ZQ320"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2",
+    "serialport": "^10.4.0"
+  },
+  "optionalDependencies": {
+    "serialport": "^10.4.0"
+  }
+}

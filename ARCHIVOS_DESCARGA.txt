@@ -1,0 +1,124 @@
+╔══════════════════════════════════════════════════════════════╗
+║          🍨 ICECREAM FACTURA PRO - ARCHIVOS LISTOS          ║
+║               Para GitHub + iPhone (PWA App)                 ║
+╚══════════════════════════════════════════════════════════════╝
+
+ARCHIVOS PRINCIPALES (Sube estos a GitHub):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ✅ index.html (60 KB)
+   → La aplicación completa de facturación
+   → Abre esto en Safari en tu iPhone
+   → Funciona 100% offline
+
+2. ✅ manifest.json (1.4 KB)
+   → Hace que se vea como app nativa en iPhone
+   → Define icono, nombre, colores
+
+3. ✅ sw.js (1.5 KB)
+   → Service Worker para funcionar offline
+   → Cachea automáticamente los datos
+
+4. ✅ package.json (590 B)
+   → Dependencias para el servidor de impresora
+   → (Opcional - solo si usas Bluetooth automático)
+
+5. ✅ print-server.js (7.8 KB)
+   → Servidor local para imprimir a Zebra ZQ320 Plus
+   → Se ejecuta en tu Mac/PC
+   → (Opcional - solo si quieres impresión automática)
+
+6. ✅ .gitignore (200 B)
+   → Archivos que Git no debe subir
+
+7. ✅ README.md (5.2 KB)
+   → Documentación completa en inglés
+   → Instalación, uso, troubleshooting
+
+8. ✅ INSTALACION_RAPIDA.md (3.9 KB)
+   → Guía rápida en ESPAÑOL
+   → 5 pasos para empezar en tu iPhone
+
+9. ✅ GITHUB_SETUP.md (2.2 KB)
+   → Cómo subir a GitHub paso a paso
+   → En ESPAÑOL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASOS RÁPIDOS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣ DESCARGA ESTOS ARCHIVOS
+   └─ Descargas esta carpeta /outputs
+
+2️⃣ VE A GITHUB.COM
+   └─ Crea nuevo repo: icecream-factura-pro
+   └─ Sube los 9 archivos
+   └─ Presiona "Commit"
+
+3️⃣ EN TU iPhone (Safari)
+   └─ Ve a: https://github.com/TU_USUARIO/icecream-factura-pro
+   └─ Descarga el ZIP
+   └─ Abre "index.html" con Safari
+
+4️⃣ INSTALA COMO APP
+   └─ Botón compartir → "Agregar a pantalla de inicio"
+   └─ Dale nombre: "IceCream Pro"
+   └─ ¡Listo!
+
+5️⃣ CONECTA LA IMPRESORA
+   └─ En la app: 🖨️ Impresora
+   └─ Lee INSTALACION_RAPIDA.md para detalles
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FUNCIONALIDADES INCLUIDAS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Facturación completa (📋 Nueva Factura)
+✅ Notas de crédito (🔻 Créditos)
+✅ Gestión de productos (🍨 Productos)
+✅ Reportes por período (📈 Reportes)
+✅ Detalle por tienda/factura (📊 Historial)
+✅ Configuración de impresora (🖨️ Impresora)
+✅ Impresión a Zebra ZQ320 Plus
+✅ Exportar a PDF
+✅ Funciona 100% offline
+✅ Datos guardados localmente
+✅ Interfaz nativa en iPhone
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+REQUISITOS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 iPhone: iOS 12+ (iOS 14+ recomendado)
+🖨️ Impresora: Zebra ZQ320 Plus
+🌐 Para server: Mac/PC con Node.js 14+
+   (Opcional - solo para impresión automática)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LEER PRIMERO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 INSTALACION_RAPIDA.md
+   → Guía rápida en ESPAÑOL para empezar ya
+
+📖 GITHUB_SETUP.md
+   → Cómo subir a GitHub (muy fácil)
+
+📖 README.md
+   → Documentación completa
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+¿PREGUNTAS?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📧 Abre un "Issue" en tu repo de GitHub
+🔗 https://github.com/TU_USUARIO/icecream-factura-pro/issues
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+¡BUENA SUERTE FACTURANDO! 🎉
