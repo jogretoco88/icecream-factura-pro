@@ -866,80 +866,76 @@
     if (closeBtn) closeBtn.addEventListener('click', closePreview);
     if (printBtn) printBtn.addEventListener('click', () => {
       console.log('Print clicked');
-      if (typeof html2pdf === 'undefined') {
-        alert('No se pudo cargar el generador de PDF (requiere conexión a internet). Intenta de nuevo o usa "Descargar PDF".');
-        return;
-      }
       
-      const btn = document.getElementById('doPrintBtn');
-      const originalText = btn.textContent;
-      btn.textContent = '⏳ Preparando...'; btn.disabled = true;
-      
-      // Obtener SOLO el elemento receiptPaper (la factura, nada más)
+      // Obtener contenido de la factura
       const receiptPaper = document.getElementById('receiptPaper');
       if (!receiptPaper) {
         alert('No hay contenido para imprimir');
-        btn.textContent = originalText;
-        btn.disabled = false;
         return;
       }
       
       const isReport = currentPreviewKind === 'report';
       const widthMm = isReport ? 190 : parseFloat(printerConfig.width || '72');
-      const heightMm = Math.max(80, (receiptPaper.scrollHeight / 3.7795) + 15);
       
-      // Crear elemento temporal que SOLO contenga la factura
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = receiptPaper.innerHTML;
-      tempDiv.style.visibility = 'hidden';
-      tempDiv.style.position = 'absolute';
-      tempDiv.style.width = widthMm + 'mm';
-      document.body.appendChild(tempDiv);
+      // Crear iframe invisible
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
       
-      html2pdf().set({
-        margin: [3, 3, 3, 3],
-        html2canvas: { 
-          scale: 5,
-          useCORS: true,
-          logging: false,
-          windowHeight: tempDiv.scrollHeight,
-          windowWidth: tempDiv.scrollWidth,
-          backgroundColor: '#ffffff',
-          allowTaint: true
-        },
-        jsPDF: { 
-          unit: 'mm', 
-          format: [widthMm, heightMm], 
-          orientation: 'portrait',
-          compress: false
-        },
-        pagebreak: { mode: 'avoid' }
-      }).from(tempDiv).output('blob').then(blob => {
-        document.body.removeChild(tempDiv);
-        const url = URL.createObjectURL(blob);
-        const printWindow = window.open(url, '_blank', 'toolbar=no,location=no,menubar=no,width=800,height=600');
-        
-        if (printWindow) {
-          // Esperar a que el PDF cargue completamente antes de imprimir
-          setTimeout(() => {
-            printWindow.print();
-            btn.textContent = originalText; 
-            btn.disabled = false;
-            // Cerrar ventana después de imprimir
-            setTimeout(() => printWindow.close(), 1000);
-          }, 1000);
-        } else {
-          alert('No se pudo abrir la ventana de impresión. Verifica que los pop-ups no estén bloqueados.');
-          btn.textContent = originalText; 
-          btn.disabled = false;
-        }
-      }).catch(err => {
-        document.body.removeChild(tempDiv);
-        console.error('Error:', err);
-        alert('Error al generar la impresión');
-        btn.textContent = originalText; 
-        btn.disabled = false;
-      });
+      // HTML para imprimir: SOLO la factura, nada más
+      const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { background: white; padding: 10mm; }
+            #receipt {
+              width: ${widthMm}mm;
+              margin: 0 auto;
+              font-family: 'Courier New', Courier, monospace;
+              font-size: 10.5px;
+              line-height: 1.45;
+              color: #000;
+            }
+            #receipt h2 { text-align: center; font-size: 13px; margin: 0; }
+            #receipt .sub { text-align: center; font-size: 9px; margin: 0; }
+            #receipt hr { border: none; border-top: 1px dashed #000; margin: 3mm 0; }
+            #receipt table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+            #receipt th { text-align: left; border-bottom: 1px solid #000; padding-bottom: 2px; }
+            #receipt td { padding: 2px 0; }
+            #receipt .r { text-align: right; }
+            #receipt .c { text-align: center; }
+            #receipt .total-line { text-align: right; font-weight: bold; font-size: 13px; }
+            #receipt .thanks { text-align: center; font-size: 9px; margin-top: 4mm; }
+            @media print {
+              body { margin: 0; padding: 0; }
+              #receipt { width: ${widthMm}mm; margin: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div id="receipt">${receiptPaper.innerHTML}</div>
+          <script>
+            window.addEventListener('load', function() {
+              setTimeout(function() {
+                window.print();
+                setTimeout(function() {
+                  window.close();
+                }, 500);
+              }, 200);
+            });
+          <\/script>
+        </body>
+        </html>
+      `;
+      
+      // Escribir contenido en iframe
+      iframe.contentWindow.document.open();
+      iframe.contentWindow.document.write(printContent);
+      iframe.contentWindow.document.close();
     });
     
     if (pdfBtn) {
