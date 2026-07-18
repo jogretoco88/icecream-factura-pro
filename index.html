@@ -848,29 +848,48 @@
     document.getElementById('previewModal').classList.remove('hidden');
   }
   function closePreview() { document.getElementById('previewModal').classList.add('hidden'); }
-  document.getElementById('closePreviewBtn').addEventListener('click', closePreview);
-  document.getElementById('doPrintBtn').addEventListener('click', () => window.print());
-  document.getElementById('previewModal').addEventListener('click', (e) => { if (e.target.id === 'previewModal') closePreview(); });
-
-  document.getElementById('downloadPdfBtn').addEventListener('click', () => {
-    if (typeof html2pdf === 'undefined') {
-      alert('No se pudo cargar el generador de PDF (requiere conexión a internet). Intenta de nuevo o usa "Imprimir" y elige "Guardar como PDF" en el diálogo.');
-      return;
+  
+  // Inicializar botones cuando DOM está listo
+  function initializeButtons() {
+    const closeBtn = document.getElementById('closePreviewBtn');
+    const printBtn = document.getElementById('doPrintBtn');
+    const pdfBtn = document.getElementById('downloadPdfBtn');
+    const modal = document.getElementById('previewModal');
+    
+    if (closeBtn) closeBtn.addEventListener('click', closePreview);
+    if (printBtn) printBtn.addEventListener('click', () => { console.log('Print clicked'); window.print(); });
+    if (modal) modal.addEventListener('click', (e) => { if (e.target.id === 'previewModal') closePreview(); });
+    
+    if (pdfBtn) {
+      pdfBtn.addEventListener('click', () => {
+        console.log('PDF clicked');
+        if (typeof html2pdf === 'undefined') {
+          alert('No se pudo cargar el generador de PDF (requiere conexión a internet). Intenta de nuevo o usa "Imprimir" y elige "Guardar como PDF" en el diálogo.');
+          return;
+        }
+        const el = document.getElementById('receiptPaper');
+        const isReport = currentPreviewKind === 'report';
+        const widthMm = isReport ? 190 : parseFloat(printerConfig.width);
+        const heightMm = Math.max(80, (el.scrollHeight / 3.7795) + 15);
+        const btn = document.getElementById('downloadPdfBtn');
+        const originalText = btn.textContent;
+        btn.textContent = '⏳ Generando...'; btn.disabled = true;
+        html2pdf().set({
+          margin: 0,
+          filename: (currentPreviewFilename || 'documento') + '.pdf',
+          html2canvas: { scale: 3, useCORS: true },
+          jsPDF: { unit: 'mm', format: [widthMm, heightMm], orientation: 'portrait' }
+        }).from(el).save().finally(() => { btn.textContent = originalText; btn.disabled = false; });
+      });
     }
-    const el = document.getElementById('receiptPaper');
-    const isReport = currentPreviewKind === 'report';
-    const widthMm = isReport ? 190 : parseFloat(printerConfig.width);
-    const heightMm = Math.max(80, (el.scrollHeight / 3.7795) + 15);
-    const btn = document.getElementById('downloadPdfBtn');
-    const originalText = btn.textContent;
-    btn.textContent = '⏳ Generando...'; btn.disabled = true;
-    html2pdf().set({
-      margin: 0,
-      filename: (currentPreviewFilename || 'documento') + '.pdf',
-      html2canvas: { scale: 3, useCORS: true },
-      jsPDF: { unit: 'mm', format: [widthMm, heightMm], orientation: 'portrait' }
-    }).from(el).save().finally(() => { btn.textContent = originalText; btn.disabled = false; });
-  });
+  }
+  
+  // Llamar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeButtons);
+  } else {
+    initializeButtons();
+  }
 
   document.getElementById('previewBtn').addEventListener('click', () => {
     if (currentItems.length === 0) { alert('Agrega productos para ver la vista previa'); return; }
