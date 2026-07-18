@@ -151,30 +151,30 @@
   #receiptPaper {
     background: white; width: var(--receipt-width); margin: 0 auto; padding: 3mm 3mm 3mm var(--receipt-margin-left);
     font-family: 'Courier New', Courier, monospace; font-size: calc(10.5px * var(--receipt-font-scale)); line-height: 1.45;
-    color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    color: #000000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-weight: bold;
   }
-  #receiptPaper h2 { text-align: center; font-size: calc(13px * var(--receipt-font-scale)); margin: 0; }
-  #receiptPaper .sub { text-align: center; font-size: calc(9px * var(--receipt-font-scale)); margin: 0; }
-  #receiptPaper hr { border: none; border-top: 1px dashed #000; margin: 3mm 0; }
-  #receiptPaper table { width: 100%; border-collapse: collapse; font-size: calc(9.5px * var(--receipt-font-scale)); }
-  #receiptPaper th { text-align: left; border-bottom: 1px solid #000; padding-bottom: 2px; }
-  #receiptPaper td { padding: 2px 0; vertical-align: top; }
-  #receiptPaper .r { text-align: right; }
-  #receiptPaper .c { text-align: center; }
-  #receiptPaper .total-line { text-align: right; font-weight: bold; font-size: calc(13px * var(--receipt-font-scale)); }
-  #receiptPaper .thanks { text-align: center; font-size: calc(9px * var(--receipt-font-scale)); margin-top: 4mm; }
+  #receiptPaper h2 { text-align: center; font-size: calc(13px * var(--receipt-font-scale)); margin: 0; font-weight: bold; color: #000000; }
+  #receiptPaper .sub { text-align: center; font-size: calc(9px * var(--receipt-font-scale)); margin: 0; font-weight: bold; color: #000000; }
+  #receiptPaper hr { border: none; border-top: 2px solid #000000; margin: 3mm 0; }
+  #receiptPaper table { width: 100%; border-collapse: collapse; font-size: calc(9.5px * var(--receipt-font-scale)); font-weight: bold; }
+  #receiptPaper th { text-align: left; border-bottom: 2px solid #000000; padding-bottom: 2px; font-weight: bold; color: #000000; }
+  #receiptPaper td { padding: 2px 0; vertical-align: top; font-weight: bold; color: #000000; }
+  #receiptPaper .r { text-align: right; font-weight: bold; }
+  #receiptPaper .c { text-align: center; font-weight: bold; }
+  #receiptPaper .total-line { text-align: right; font-weight: bold; font-size: calc(13px * var(--receipt-font-scale)); color: #000000; }
+  #receiptPaper .thanks { text-align: center; font-size: calc(9px * var(--receipt-font-scale)); margin-top: 4mm; font-weight: bold; color: #000000; }
 
   /* ---- Modo reporte: hoja más ancha, tipografía normal, para Reportes ---- */
   #receiptPaper.report-mode {
     width: 190mm; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 12px; padding: 10mm;
+    font-size: 12px; padding: 10mm; font-weight: bold; color: #000000;
   }
-  #receiptPaper.report-mode h2 { font-size: 20px; text-align: left; }
-  #receiptPaper.report-mode .sub { text-align: left; font-size: 11px; color: #4b5563; }
-  #receiptPaper.report-mode table { font-size: 12px; }
-  #receiptPaper.report-mode th { background: #e0e7ff; padding: 6px; }
-  #receiptPaper.report-mode td { padding: 6px; }
-  #receiptPaper.report-mode .total-line { font-size: 16px; }
+  #receiptPaper.report-mode h2 { font-size: 20px; text-align: left; font-weight: bold; color: #000000; }
+  #receiptPaper.report-mode .sub { text-align: left; font-size: 11px; color: #000000; font-weight: bold; }
+  #receiptPaper.report-mode table { font-size: 12px; font-weight: bold; }
+  #receiptPaper.report-mode th { background: #e0e7ff; padding: 6px; font-weight: bold; color: #000000; }
+  #receiptPaper.report-mode td { padding: 6px; font-weight: bold; color: #000000; }
+  #receiptPaper.report-mode .total-line { font-size: 16px; font-weight: bold; color: #000000; }
 
   .modal-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
   .modal-actions button { flex: 1 1 28%; min-width: 90px; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
@@ -391,7 +391,7 @@
   const COMPANY = {
     name: 'General Distribution LLC',
     address: '1950 S 900 W, Salt Lake City, UT 84104',
-    phone: '(970) 779-1116'
+    phone: '970 904 0722'
   };
   const TIERS = [
     { key: 'unit', label: 'Unidad', priceField: 'priceUnit' },
@@ -891,28 +891,31 @@
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { background: white; padding: 10mm; }
+            body { background: white; padding: 0; margin: 0; }
             #receipt {
               width: ${widthMm}mm;
               margin: 0 auto;
+              padding: 2mm 2mm 2mm 2mm;
               font-family: 'Courier New', Courier, monospace;
               font-size: 10.5px;
-              line-height: 1.45;
-              color: #000;
+              line-height: 1.35;
+              color: #000000;
+              font-weight: bold;
             }
-            #receipt h2 { text-align: center; font-size: 13px; margin: 0; }
-            #receipt .sub { text-align: center; font-size: 9px; margin: 0; }
-            #receipt hr { border: none; border-top: 1px dashed #000; margin: 3mm 0; }
-            #receipt table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
-            #receipt th { text-align: left; border-bottom: 1px solid #000; padding-bottom: 2px; }
-            #receipt td { padding: 2px 0; }
-            #receipt .r { text-align: right; }
-            #receipt .c { text-align: center; }
-            #receipt .total-line { text-align: right; font-weight: bold; font-size: 13px; }
-            #receipt .thanks { text-align: center; font-size: 9px; margin-top: 4mm; }
+            #receipt h2 { text-align: center; font-size: 12px; margin: 0; padding: 0; font-weight: bold; color: #000000; }
+            #receipt .sub { text-align: center; font-size: 8px; margin: 0; padding: 0; font-weight: bold; color: #000000; }
+            #receipt hr { border: none; border-top: 2px solid #000000; margin: 1mm 0; padding: 0; }
+            #receipt table { width: 100%; border-collapse: collapse; font-size: 9px; font-weight: bold; }
+            #receipt th { text-align: left; border-bottom: 2px solid #000000; padding: 1px 0; font-weight: bold; color: #000000; }
+            #receipt td { padding: 1px 0; font-weight: bold; color: #000000; }
+            #receipt .r { text-align: right; font-weight: bold; }
+            #receipt .c { text-align: center; font-weight: bold; }
+            #receipt .total-line { text-align: right; font-weight: bold; font-size: 12px; color: #000000; }
+            #receipt .thanks { text-align: center; font-size: 8px; margin-top: 2mm; padding: 0; font-weight: bold; color: #000000; }
             @media print {
+              * { margin: 0 !important; padding: 0 !important; }
               body { margin: 0; padding: 0; }
-              #receipt { width: ${widthMm}mm; margin: 0; }
+              #receipt { width: ${widthMm}mm; margin: 0; padding: 2mm 2mm 2mm 2mm; page-break-inside: avoid; }
             }
           </style>
         </head>
