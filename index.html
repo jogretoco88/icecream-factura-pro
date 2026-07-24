@@ -176,6 +176,29 @@
   #receiptPaper.report-mode td { padding: 6px; font-weight: bold; color: #000000; }
   #receiptPaper.report-mode .total-line { font-size: 16px; font-weight: bold; color: #000000; }
 
+  /* ---- Modo Carta/Letter: factura profesional de página completa (impresora normal/láser) ---- */
+  #receiptPaper.letter-mode {
+    width: 215.9mm; min-height: 279.4mm; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px; padding: 15mm; font-weight: normal; color: #111827; line-height: 1.5;
+  }
+  #receiptPaper.letter-mode .inv-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #4f46e5; padding-bottom: 12px; margin-bottom: 16px; }
+  #receiptPaper.letter-mode .inv-company h2 { font-size: 22px; margin: 0 0 4px; text-align: left; color: #312e81; }
+  #receiptPaper.letter-mode .inv-company .sub { text-align: left; font-size: 12px; color: #4b5563; margin: 0; }
+  #receiptPaper.letter-mode .inv-doc-title { text-align: right; }
+  #receiptPaper.letter-mode .inv-doc-title h3 { font-size: 20px; color: #4f46e5; margin: 0 0 6px; }
+  #receiptPaper.letter-mode .inv-doc-title p { font-size: 12px; margin: 2px 0; color: #374151; }
+  #receiptPaper.letter-mode .inv-billto { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; }
+  #receiptPaper.letter-mode .inv-billto h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; margin: 0 0 6px; }
+  #receiptPaper.letter-mode .inv-billto p { margin: 2px 0; font-size: 13px; }
+  #receiptPaper.letter-mode table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+  #receiptPaper.letter-mode th { background: #4f46e5; color: white; text-align: left; padding: 10px 12px; font-size: 12px; text-transform: uppercase; }
+  #receiptPaper.letter-mode td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; }
+  #receiptPaper.letter-mode tr:nth-child(even) td { background: #f8fafc; }
+  #receiptPaper.letter-mode .inv-totals { display: flex; justify-content: flex-end; margin-bottom: 24px; }
+  #receiptPaper.letter-mode .inv-totals-box { min-width: 260px; }
+  #receiptPaper.letter-mode .inv-totals-box .total-line { font-size: 20px; background: #eef2ff; padding: 12px 16px; border-radius: 8px; text-align: right; color: #312e81; }
+  #receiptPaper.letter-mode .thanks { text-align: center; font-size: 12px; color: #6b7280; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 16px; }
+
   .modal-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
   .modal-actions button { flex: 1 1 28%; min-width: 90px; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
   .btn-close { background: #9ca3af; color: white; }
@@ -190,6 +213,7 @@
     .modal-actions { display: none !important; }
     #receiptPaper { width: var(--receipt-width) !important; }
     #receiptPaper.report-mode { width: 190mm !important; }
+    #receiptPaper.letter-mode { width: 215.9mm !important; }
   }
 </style>
 </head>
@@ -341,32 +365,44 @@
 
   <!-- PRINTER CONFIG TAB -->
   <div id="tab-printer" class="card hidden">
-    <h2>🖨️ Configuración de Impresora Térmica</h2>
+    <h2>🖨️ Configuración de Impresora</h2>
     <p style="font-size:0.8rem;color:#6b7280;margin:-8px 0 14px;line-height:1.5;">
-      Aquí defines el formato del recibo (ancho de papel, margen y tamaño de letra) para que coincida con tu impresora térmica.
+      Aquí defines el formato de la factura para que coincida con tu impresora.
       Por seguridad, los navegadores no permiten elegir la impresora automáticamente desde una página web: al presionar
-      "Imprimir" te aparecerá el cuadro de diálogo del sistema — ahí selecciona tu impresora térmica.
+      "Imprimir" te aparecerá el cuadro de diálogo del sistema — ahí selecciona tu impresora.
     </p>
+    <div class="field-label">Tipo de papel / impresora</div>
+    <select id="printerPaperType">
+      <option value="thermal">🧾 Térmica (rollo angosto)</option>
+      <option value="letter">📄 Carta / Letter (impresora normal o láser)</option>
+    </select>
     <div class="field-label">Modelo / Nombre de la impresora (referencia)</div>
-    <input type="text" id="printerName" placeholder="ej: Zebra ZQ320">
-    <div class="field-label">Ancho de papel</div>
-    <select id="printerWidth">
-      <option value="58mm">58mm (2")</option>
-      <option value="72mm">72mm (3")</option>
-      <option value="80mm">80mm (3.15")</option>
-    </select>
-    <div class="field-label">Margen izquierdo</div>
-    <select id="printerMargin">
-      <option value="2mm">Angosto (2mm)</option>
-      <option value="5mm">Medio (5mm)</option>
-      <option value="8mm">Amplio (8mm)</option>
-    </select>
-    <div class="field-label">Tamaño de letra</div>
-    <select id="printerFontScale">
-      <option value="0.9">Pequeña</option>
-      <option value="1">Normal</option>
-      <option value="1.15">Grande</option>
-    </select>
+    <input type="text" id="printerName" placeholder="ej: HP LaserJet Pro M203dw">
+
+    <div id="thermalOptions">
+      <div class="field-label">Ancho de papel</div>
+      <select id="printerWidth">
+        <option value="58mm">58mm (2")</option>
+        <option value="72mm">72mm (3")</option>
+        <option value="80mm">80mm (3.15")</option>
+      </select>
+      <div class="field-label">Margen izquierdo</div>
+      <select id="printerMargin">
+        <option value="2mm">Angosto (2mm)</option>
+        <option value="5mm">Medio (5mm)</option>
+        <option value="8mm">Amplio (8mm)</option>
+      </select>
+      <div class="field-label">Tamaño de letra</div>
+      <select id="printerFontScale">
+        <option value="0.9">Pequeña</option>
+        <option value="1">Normal</option>
+        <option value="1.15">Grande</option>
+      </select>
+    </div>
+    <p id="letterNote" class="hidden" style="font-size:0.8rem;color:#4f46e5;font-weight:700;margin:10px 0;">
+      📄 Formato Carta (8.5" x 11") activado — la factura se verá como un documento profesional de página completa.
+    </p>
+
     <button class="btn-primary" id="savePrinterConfigBtn" style="width:100%;margin-top:6px;">💾 Guardar Configuración</button>
     <button class="btn-print preview-btn" id="testPrintBtn" style="margin-top:10px;">🧾 Ver Página de Prueba</button>
   </div>
@@ -414,7 +450,8 @@
   let currentCreditItems = [];
 
   let printerConfig = JSON.parse(localStorage.getItem('gd_printerConfig') || 'null') ||
-    { name: 'Zebra ZQ320', width: '72mm', margin: '8mm', fontScale: '1' };
+    { name: 'Zebra ZQ320', paperType: 'thermal', width: '72mm', margin: '8mm', fontScale: '1' };
+  if (!printerConfig.paperType) printerConfig.paperType = 'thermal'; // compatibilidad con configuraciones guardadas anteriores
 
   let currentPreviewKind = null;
   let currentPreviewFilename = 'documento';
@@ -805,6 +842,9 @@
   // ================= VISTA PREVIA / IMPRESIÓN =================
   function buildReceiptHtml(record, kind) {
     const isCredit = kind === 'credit';
+    if (printerConfig.paperType === 'letter') {
+      return buildLetterInvoiceHtml(record, kind);
+    }
     const itemsHtml = record.items.map(item => `
       <tr>
         <td>${item.productName}<br><span style="font-size:8.5px;color:#333;">${item.tierLabel}</span></td>
@@ -835,10 +875,55 @@
       <p class="thanks">${isCredit ? 'Nota de crédito aplicada a cuenta del cliente' : '¡Gracias por su compra!'}</p>`;
   }
 
+  // Diseño profesional de factura de página completa (papel Carta / Letter)
+  function buildLetterInvoiceHtml(record, kind) {
+    const isCredit = kind === 'credit';
+    const itemsHtml = record.items.map(item => `
+      <tr>
+        <td>${item.productName} <span style="color:#6b7280;font-size:12px;">(${item.tierLabel})</span></td>
+        <td class="c">${item.quantity}</td>
+        <td class="r">$${item.price.toFixed(2)}</td>
+        <td class="r">$${(item.price * item.quantity).toFixed(2)}</td>
+      </tr>`).join('');
+    return `
+      <div class="inv-header">
+        <div class="inv-company">
+          <h2>${COMPANY.name}</h2>
+          <p class="sub">${COMPANY.address}</p>
+          <p class="sub">Tel: ${COMPANY.phone}</p>
+        </div>
+        <div class="inv-doc-title">
+          <h3>${isCredit ? 'NOTA DE CRÉDITO' : 'FACTURA'}</h3>
+          <p><strong>No.</strong> ${record.number}</p>
+          <p><strong>Fecha:</strong> ${record.date}</p>
+          ${isCredit && record.refInvoice ? `<p><strong>Ref. Factura:</strong> #${record.refInvoice}</p>` : ''}
+        </div>
+      </div>
+      <div class="inv-billto">
+        <h4>${isCredit ? 'Cliente / Motivo' : 'Facturar a'}</h4>
+        <p><strong>${record.customerName || 'S/N'}</strong></p>
+        ${record.customerAddress ? `<p>${record.customerAddress}</p>` : ''}
+        ${record.customerPhone ? `<p>Tel: ${record.customerPhone}</p>` : ''}
+        ${isCredit ? `<p>Motivo: ${record.reason}</p>` : ''}
+      </div>
+      <table>
+        <thead><tr><th>Producto</th><th class="c">Cantidad</th><th class="r">Precio Unit.</th><th class="r">Subtotal</th></tr></thead>
+        <tbody>${itemsHtml}</tbody>
+      </table>
+      <div class="inv-totals">
+        <div class="inv-totals-box">
+          <p class="total-line">${isCredit ? 'CRÉDITO: -$' + record.total : 'TOTAL: $' + record.total}</p>
+        </div>
+      </div>
+      <p class="thanks">${isCredit ? 'Nota de crédito aplicada a cuenta del cliente' : '¡Gracias por su compra!'} · ${COMPANY.name}</p>`;
+  }
+
   function openPreview(record, kind) {
     currentPreviewKind = kind;
     const paper = document.getElementById('receiptPaper');
+    const isLetter = kind !== 'report' && printerConfig.paperType === 'letter';
     paper.classList.toggle('report-mode', kind === 'report');
+    paper.classList.toggle('letter-mode', isLetter);
 
     let titleText;
     if (kind === 'report') {
@@ -846,8 +931,9 @@
       currentPreviewFilename = 'Reporte_' + record.from + '_a_' + record.to;
       paper.innerHTML = buildReportHtml(record);
     } else {
+      const sizeLabel = isLetter ? 'Carta 8.5"x11"' : printerConfig.width;
       titleText = (kind === 'credit' ? 'Vista Previa — Nota de Crédito' : 'Vista Previa — Factura') +
-        ' (' + printerConfig.name + ' - ' + printerConfig.width + ')';
+        ' (' + printerConfig.name + ' - ' + sizeLabel + ')';
       currentPreviewFilename = (kind === 'credit' ? 'Credito_' + record.number : 'Factura_' + record.number);
       paper.innerHTML = buildReceiptHtml(record, kind);
     }
@@ -875,23 +961,15 @@
       }
       
       const isReport = currentPreviewKind === 'report';
-      const widthMm = isReport ? 190 : parseFloat(printerConfig.width || '72');
+      const isLetter = !isReport && printerConfig.paperType === 'letter';
+      const widthMm = isReport ? 190 : (isLetter ? 215.9 : parseFloat(printerConfig.width || '72'));
       
       // Crear iframe invisible
       const iframe = document.createElement('iframe');
       iframe.style.display = 'none';
       document.body.appendChild(iframe);
       
-      // HTML para imprimir: SOLO la factura, nada más
-      const printContent = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { background: white; padding: 0; margin: 0; }
+      const thermalStyles = `
             #receipt {
               width: ${widthMm}mm;
               margin: 0 auto;
@@ -916,7 +994,51 @@
               * { margin: 0 !important; padding: 0 !important; }
               body { margin: 0; padding: 0; }
               #receipt { width: ${widthMm}mm; margin: 0; padding: 2mm 2mm 2mm 2mm; page-break-inside: avoid; }
+            }`;
+
+      const letterStyles = `
+            #receipt {
+              width: ${widthMm}mm; min-height: 279.4mm;
+              margin: 0 auto; padding: 15mm;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              font-size: 13px; line-height: 1.5; color: #111827;
             }
+            #receipt .inv-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #4f46e5; padding-bottom: 12px; margin-bottom: 16px; }
+            #receipt .inv-company h2 { font-size: 22px; margin: 0 0 4px; text-align: left; color: #312e81; }
+            #receipt .inv-company .sub { text-align: left; font-size: 12px; color: #4b5563; margin: 0; }
+            #receipt .inv-doc-title { text-align: right; }
+            #receipt .inv-doc-title h3 { font-size: 20px; color: #4f46e5; margin: 0 0 6px; }
+            #receipt .inv-doc-title p { font-size: 12px; margin: 2px 0; color: #374151; }
+            #receipt .inv-billto { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; }
+            #receipt .inv-billto h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; margin: 0 0 6px; }
+            #receipt .inv-billto p { margin: 2px 0; font-size: 13px; }
+            #receipt table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+            #receipt th { background: #4f46e5; color: white; text-align: left; padding: 10px 12px; font-size: 12px; text-transform: uppercase; }
+            #receipt td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; }
+            #receipt tr:nth-child(even) td { background: #f8fafc; }
+            #receipt .r { text-align: right; }
+            #receipt .c { text-align: center; }
+            #receipt .inv-totals { display: flex; justify-content: flex-end; margin-bottom: 24px; }
+            #receipt .inv-totals-box { min-width: 260px; }
+            #receipt .inv-totals-box .total-line { font-size: 20px; background: #eef2ff; padding: 12px 16px; border-radius: 8px; text-align: right; color: #312e81; font-weight: bold; }
+            #receipt .thanks { text-align: center; font-size: 12px; color: #6b7280; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 16px; }
+            @media print {
+              * { margin: 0 !important; }
+              body { margin: 0; padding: 0; }
+              #receipt { width: ${widthMm}mm; page-break-inside: avoid; }
+            }`;
+
+      // HTML para imprimir: SOLO la factura, nada más
+      const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { background: white; padding: 0; margin: 0; }
+            ${isLetter ? letterStyles : thermalStyles}
           </style>
         </head>
         <body>
@@ -950,8 +1072,9 @@
         }
         const el = document.getElementById('receiptPaper');
         const isReport = currentPreviewKind === 'report';
-        const widthMm = isReport ? 190 : parseFloat(printerConfig.width);
-        const heightMm = Math.max(80, (el.scrollHeight / 3.7795) + 15);
+        const isLetter = !isReport && printerConfig.paperType === 'letter';
+        const widthMm = isReport ? 190 : (isLetter ? 215.9 : parseFloat(printerConfig.width));
+        const heightMm = isLetter ? 279.4 : Math.max(80, (el.scrollHeight / 3.7795) + 15);
         const btn = document.getElementById('downloadPdfBtn');
         const originalText = btn.textContent;
         btn.textContent = '⏳ Generando...'; btn.disabled = true;
@@ -1231,22 +1354,33 @@
   }
 
   function loadPrinterConfigForm() {
+    document.getElementById('printerPaperType').value = printerConfig.paperType || 'thermal';
     document.getElementById('printerName').value = printerConfig.name;
     document.getElementById('printerWidth').value = printerConfig.width;
     document.getElementById('printerMargin').value = printerConfig.margin;
     document.getElementById('printerFontScale').value = printerConfig.fontScale;
+    togglePaperTypeUI();
   }
+
+  function togglePaperTypeUI() {
+    const isLetter = document.getElementById('printerPaperType').value === 'letter';
+    document.getElementById('thermalOptions').classList.toggle('hidden', isLetter);
+    document.getElementById('letterNote').classList.toggle('hidden', !isLetter);
+  }
+  document.getElementById('printerPaperType').addEventListener('change', togglePaperTypeUI);
 
   document.getElementById('savePrinterConfigBtn').addEventListener('click', () => {
     printerConfig = {
-      name: document.getElementById('printerName').value.trim() || 'Impresora Térmica',
+      name: document.getElementById('printerName').value.trim() || 'Impresora',
+      paperType: document.getElementById('printerPaperType').value,
       width: document.getElementById('printerWidth').value,
       margin: document.getElementById('printerMargin').value,
       fontScale: document.getElementById('printerFontScale').value
     };
     save.printerConfig();
     applyPrinterConfig();
-    alert('Configuración guardada ✅. Al imprimir, elige "' + printerConfig.name + '" en el cuadro de diálogo de impresión de tu navegador.');
+    const paperLabel = printerConfig.paperType === 'letter' ? 'Carta (8.5"x11")' : printerConfig.width;
+    alert('Configuración guardada ✅ (' + paperLabel + '). Al imprimir, elige "' + printerConfig.name + '" en el cuadro de diálogo de impresión de tu navegador.');
   });
 
   document.getElementById('testPrintBtn').addEventListener('click', () => {
